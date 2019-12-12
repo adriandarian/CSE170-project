@@ -1,4 +1,3 @@
-
 # include "my_viewer.h"
 
 # include <sigogl/ui_button.h>
@@ -32,18 +31,21 @@ void MyViewer::build_ui ()
 
 void MyViewer::add_model ( SnShape* s, GsVec p )
 {
-	// This method demonstrates how to add some elements to our scene graph: lines,
-	// and a shape, and all in a group under a SnManipulator.
-	// Therefore we are also demonstrating the use of a manipulator to allow the user to
-	// change the position of the object with the mouse. If you do not need mouse interaction,
-	// you can just use a SnTransform to apply a transformation instead of a SnManipulator.
-	// You would then add the transform as 1st element of the group, and set g->separator(true).
-	// Your scene graph should always be carefully designed according to your application needs.
-
 	SnManipulator* manip = new SnManipulator;
 	GsMat m;
-	m.translation ( p );
-	manip->initial_mat ( m );
+	GsMat r;
+	m.translation(p);
+	manip->initial_mat(m);
+	SnManipulator* shadow = new SnManipulator;
+	GsMat shad;
+
+	shad.setl1(1, -8 / 5, 0, 0);
+	shad.setl2(0, 0, 0, 0);
+	shad.setl3(0, -20 / 5, 1, 0);
+	shad.setl4(0, 0, 0, 1);
+	shad.rcombtrans(p);
+
+	shadow->initial_mat(shad);
 
 	SnGroup* g = new SnGroup;
 	SnLines* l = new SnLines;
@@ -51,34 +53,45 @@ void MyViewer::add_model ( SnShape* s, GsVec p )
 	g->add(s);
 	g->add(l);
 	manip->child(g);
-	// manip->visible(false); // call this to turn off mouse interaction
+	shadow->child(g);
+	rootg()->add(manip);
+	rootg()->add(shadow);
 
 	rootg()->add(manip);
 }
 
 void MyViewer::build_scene ()
 {
-	SnPrimitive* p;
+	// Re-initialize the scene before drawing.
+	rootg()->remove_all();
 
-	p = new SnPrimitive(GsPrimitive::Box,1,3,1);
-	p->prim().material.diffuse=GsColor::yellow;
-	add_model ( p, GsVec(0,0,0) );
+	SnModel *Grass = new SnModel;//grass
+	if (!Grass->model()->load("C:\\Users\\adria\\Documents\\CSE170-project\\sigapp\\src\\Objects\\grassPatch.obj")) {
+		gsout << "Grass was not loaded" << gsnl;
+	}
+	Grass->color(GsColor::green);
+	GsModel* GrassModel = Grass->model();
+	GrassModel->scale(10000);
+	rootg()->add(Grass); 
 
-	p = new SnPrimitive(GsPrimitive::Sphere,2);
-	p->prim().material.diffuse=GsColor::red;
-	add_model ( p, GsVec(-4,0,0) );
+	SnModel *TwoStoryHouse = new SnModel;
+	if (!TwoStoryHouse->model()->load("C:\\Users\\adria\\Documents\\CSE170-project\\sigapp\\src\\Objects\\mushroom-house.obj")) {
+		gsout << "TwoStoryHouse was not loaded" << gsnl;
+	}
+	// TwoStoryHouse->color(GsColor::green);
+	GsModel* TwoStoryHouseModel = TwoStoryHouse->model();
+	TwoStoryHouseModel->scale(1);
+	add_model(TwoStoryHouse, GsVec(xTwoStoryHouse, yTwoStoryHouse, zTwoStoryHouse));
 
-	p = new SnPrimitive(GsPrimitive::Cylinder,1.0,1.0,1.5);
-	p->prim().material.diffuse=GsColor::blue;
-	add_model ( p, GsVec(4,0,0) );
-
-	p = new SnPrimitive(GsPrimitive::Capsule,1,1,3);
-	p->prim().material.diffuse=GsColor::red;
-	add_model ( p, GsVec(8,0,0) );
-
-	p = new SnPrimitive(GsPrimitive::Ellipsoid,2.0,0.5);
-	p->prim().material.diffuse=GsColor::green;
-	add_model ( p, GsVec(-8,0,0) );
+	// ! Trying to load a second mushroom house
+	SnModel *TwoStoryHouse2 = new SnModel;
+	if (!TwoStoryHouse2->model()->load("C:\\Users\\adria\\Documents\\CSE170-project\\sigapp\\src\\Objects\\mushroom-house.obj")) {
+		gsout << "TwoStoryHouse was not loaded" << gsnl;
+	}
+	// TwoStoryHouse->color(GsColor::green);
+	GsModel* TwoStoryHouseModel2 = TwoStoryHouse2->model();
+	TwoStoryHouseModel2->scale(1);
+	add_model(TwoStoryHouse2, GsVec(0.0f, 5.0f, 0.0f));
 }
 
 // Below is an example of how to control the main loop of an animation:
