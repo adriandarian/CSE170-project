@@ -29,7 +29,3 @@
 *.exe
 *.out
 *.app
-
-# SIG
-sigapp/vs2017/
-sigapp/vs2019/
