@@ -58,6 +58,41 @@ void MyViewer::add_model ( SnShape* s, GsVec p )
 	rootg()->add(shadow);
 
 	rootg()->add(manip);
+
+	//FUNCTION FOR animations that move around
+
+
+	//camera FUNCTIONS :) FROM PREVIOUS PROJECT WILL NEED TO IMPLENTENT LATER
+	//double frdt = 1.0 / 30.0;
+	//double t, lt, t0 = gs_time();
+	//gtime = 0.0f;
+	//if (camView == true) {
+	//	camera().eye.x = 10;
+	//	camera().eye.y = 280;
+	//	camera().eye.z = 10;
+	//	render();
+	//	ws_check();
+	//}
+	//else {
+	//	t = 0;
+	//	lt = 0;
+	//	do {
+	//		lt = gs_time() - t0;
+	//		if (lt < 2.0f) {
+	//			camera().eye.x += 0.1f;
+	//			camera().eye.z += 0.1f;
+	//			camera().center.y = 0.0f;
+	//		}
+	//		if (lt > 2.0f && lt <= 5.0f) {
+	//			camera().eye.x -= 0.05f;
+	//			camera().eye.z -= 0.05f;
+	//		}
+
+	//		render();
+	//		ws_check();
+	//		message().setf("local time = % f", lt);
+	//	} while (lt < 5.0f);
+	//}
 }
 
 void MyViewer::build_scene ()
@@ -66,7 +101,7 @@ void MyViewer::build_scene ()
 	rootg()->remove_all();
 
 	SnModel *Grass = new SnModel;//grass
-	if (!Grass->model()->load("C:\\Users\\adria\\Documents\\CSE170-project\\sigapp\\src\\Objects\\grassPatch.obj")) {
+	if (!Grass->model()->load("C:\\Users\\Ruby Law\\Desktop\\CSE170-project-master\\sigapp\\src\\Objects\\grassPatch.obj")) {
 		gsout << "Grass was not loaded" << gsnl;
 	}
 	Grass->color(GsColor::green);
@@ -75,7 +110,7 @@ void MyViewer::build_scene ()
 	rootg()->add(Grass); 
 
 	SnModel *TwoStoryHouse = new SnModel;
-	if (!TwoStoryHouse->model()->load("C:\\Users\\adria\\Documents\\CSE170-project\\sigapp\\src\\Objects\\mushroom-house.obj")) {
+	if (!TwoStoryHouse->model()->load("C:\\Users\\Ruby Law\\Desktop\\CSE170-project-master\\sigapp\\src\\Objects\\mushroom-house.obj")) {
 		gsout << "TwoStoryHouse was not loaded" << gsnl;
 	}
 	// TwoStoryHouse->color(GsColor::green);
@@ -83,15 +118,49 @@ void MyViewer::build_scene ()
 	TwoStoryHouseModel->scale(1);
 	add_model(TwoStoryHouse, GsVec(xTwoStoryHouse, yTwoStoryHouse, zTwoStoryHouse));
 
+	SnModel* TwoStoryHouse1 = new SnModel;
+	if (!TwoStoryHouse1->model()->load("C:\\Users\\Ruby Law\\Desktop\\CSE170-project-master\\sigapp\\src\\Objects\\mushroom-house.obj")) {
+		gsout << "TwoStoryHouse was not loaded" << gsnl;
+	}
+	// TwoStoryHouse->color(GsColor::green);
+	GsModel* TwoStoryHouseModel1 = TwoStoryHouse1->model();
+	TwoStoryHouseModel1->scale(1);
+	add_model(TwoStoryHouse1, GsVec(20000.0F, 0.0F, 20000.0F));
+
+
 	// ! Trying to load a second mushroom house
 	SnModel *TwoStoryHouse2 = new SnModel;
-	if (!TwoStoryHouse2->model()->load("C:\\Users\\adria\\Documents\\CSE170-project\\sigapp\\src\\Objects\\mushroom-house.obj")) {
+	if (!TwoStoryHouse2->model()->load("C:\\Users\\Ruby Law\\Desktop\\CSE170-project-master\\sigapp\\src\\Objects\\mushroom-house-1.obj")) {
 		gsout << "TwoStoryHouse was not loaded" << gsnl;
 	}
 	// TwoStoryHouse->color(GsColor::green);
 	GsModel* TwoStoryHouseModel2 = TwoStoryHouse2->model();
 	TwoStoryHouseModel2->scale(1);
-	add_model(TwoStoryHouse2, GsVec(0.0f, 5.0f, 0.0f));
+	add_model(TwoStoryHouse2, GsVec(3000.0f, 0.0f, -20000.0f));
+
+
+
+	SnModel* TwoStoryHouse3 = new SnModel;
+	if (!TwoStoryHouse3->model()->load("C:\\Users\\Ruby Law\\Desktop\\CSE170-project-master\\sigapp\\src\\Objects\\mushroom-house.obj")) {
+		gsout << "TwoStoryHouse was not loaded" << gsnl;
+	}
+	// TwoStoryHouse->color(GsColor::green);
+	GsModel* TwoStoryHouseModel3 = TwoStoryHouse3->model();
+	TwoStoryHouseModel3->scale(1);
+	add_model(TwoStoryHouse3, GsVec(-20000.0f, 0.0f, 0.0f));
+
+	//this one is sideways
+
+	//SnModel* House = new SnModel;
+	//if (!House->model()->load("C:\\Users\\Ruby Law\\Desktop\\CSE170-project-master\\sigapp\\src\\Objects\\20951_Mushroom_v2_NEW.obj")) {
+	//	gsout << "house was not loaded" << gsnl;
+	//}
+	//// TwoStoryHouse->color(GsColor::green);
+	//GsModel* House1 = House->model();
+	//House1->scale(3000);
+	//add_model(House, GsVec(-20000.0f, 10.0f, 30000.0f));
+
+
 }
 
 // Below is an example of how to control the main loop of an animation:
