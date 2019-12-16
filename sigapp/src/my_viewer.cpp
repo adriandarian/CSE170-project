@@ -101,7 +101,7 @@ void MyViewer::build_scene ()
 	rootg()->remove_all();
 
 	SnModel *Grass = new SnModel;//grass
-	if (!Grass->model()->load("C:\\Users\\Ruby Law\\Desktop\\CSE170-project-master\\sigapp\\src\\Objects\\grassPatch.obj")) {
+	if (!Grass->model()->load("../src/Objects/grassPatch.obj")) {
 		gsout << "Grass was not loaded" << gsnl;
 	}
 	Grass->color(GsColor::green);
@@ -110,7 +110,7 @@ void MyViewer::build_scene ()
 	rootg()->add(Grass); 
 
 	SnModel *TwoStoryHouse = new SnModel;
-	if (!TwoStoryHouse->model()->load("C:\\Users\\Ruby Law\\Desktop\\CSE170-project-master\\sigapp\\src\\Objects\\mushroom-house.obj")) {
+	if (!TwoStoryHouse->model()->load("../src/Objects/mushroom-house.obj")) {
 		gsout << "TwoStoryHouse was not loaded" << gsnl;
 	}
 	// TwoStoryHouse->color(GsColor::green);
@@ -119,7 +119,7 @@ void MyViewer::build_scene ()
 	add_model(TwoStoryHouse, GsVec(xTwoStoryHouse, yTwoStoryHouse, zTwoStoryHouse));
 
 	SnModel* TwoStoryHouse1 = new SnModel;
-	if (!TwoStoryHouse1->model()->load("C:\\Users\\Ruby Law\\Desktop\\CSE170-project-master\\sigapp\\src\\Objects\\mushroom-house.obj")) {
+	if (!TwoStoryHouse1->model()->load("../src/Objects/mushroom-house.obj")) {
 		gsout << "TwoStoryHouse was not loaded" << gsnl;
 	}
 	// TwoStoryHouse->color(GsColor::green);
@@ -130,7 +130,7 @@ void MyViewer::build_scene ()
 
 	// ! Trying to load a second mushroom house
 	SnModel *TwoStoryHouse2 = new SnModel;
-	if (!TwoStoryHouse2->model()->load("C:\\Users\\Ruby Law\\Desktop\\CSE170-project-master\\sigapp\\src\\Objects\\mushroom-house-1.obj")) {
+	if (!TwoStoryHouse2->model()->load("../src/Objects/mushroom-house-1.obj")) {
 		gsout << "TwoStoryHouse was not loaded" << gsnl;
 	}
 	// TwoStoryHouse->color(GsColor::green);
@@ -141,7 +141,7 @@ void MyViewer::build_scene ()
 
 
 	SnModel* TwoStoryHouse3 = new SnModel;
-	if (!TwoStoryHouse3->model()->load("C:\\Users\\Ruby Law\\Desktop\\CSE170-project-master\\sigapp\\src\\Objects\\mushroom-house.obj")) {
+	if (!TwoStoryHouse3->model()->load("../src/Objects/mushroom-house.obj")) {
 		gsout << "TwoStoryHouse was not loaded" << gsnl;
 	}
 	// TwoStoryHouse->color(GsColor::green);
@@ -152,7 +152,7 @@ void MyViewer::build_scene ()
 	//this one is sideways
 
 	//SnModel* House = new SnModel;
-	//if (!House->model()->load("C:\\Users\\Ruby Law\\Desktop\\CSE170-project-master\\sigapp\\src\\Objects\\20951_Mushroom_v2_NEW.obj")) {
+	//if (!House->model()->load("../src/Objects/20951_Mushroom_v2_NEW.obj")) {
 	//	gsout << "house was not loaded" << gsnl;
 	//}
 	//// TwoStoryHouse->color(GsColor::green);
