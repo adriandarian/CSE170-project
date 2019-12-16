@@ -12,6 +12,10 @@ MyViewer::MyViewer ( int x, int y, int w, int h, const char* l ) : WsViewer(x,y,
 {
 	_nbut=0;
 	_animating=false;
+	cameraX = camera().center.x;
+	cameraY = camera().center.y;
+	cameraZ = camera().center.z;
+
 	build_ui ();
 	build_scene ();
 }
@@ -132,7 +136,7 @@ void MyViewer::build_scene ()
 	SnModel *TwoStoryHouse2 = new SnModel;
 	if (!TwoStoryHouse2->model()->load("../src/Objects/mushroom-house-1.obj")) {
 		gsout << "TwoStoryHouse was not loaded" << gsnl;
-	}
+	}	
 	// TwoStoryHouse->color(GsColor::green);
 	GsModel* TwoStoryHouseModel2 = TwoStoryHouse2->model();
 	TwoStoryHouseModel2->scale(1);
@@ -161,6 +165,37 @@ void MyViewer::build_scene ()
 	//add_model(House, GsVec(-20000.0f, 10.0f, 30000.0f));
 
 
+}
+
+void MyViewer::moveCameraLeft() {
+	camera().translate(GsVec(cameraX - 0.1f, cameraY, cameraZ));
+	render();
+	ws_check();
+}
+
+
+void MyViewer::moveCameraUp() {
+	camera().eye.z += 0.1f;
+	camera().center.z += 0.1f;
+	camera().up.z += 0.1f;
+	render();
+	ws_check();
+}
+
+void MyViewer::moveCameraRight() {
+	camera().eye.x -= 0.1f;
+	camera().center.x -= 0.1f;
+	camera().up.x -= 0.1f;
+	render();
+	ws_check();
+}
+
+void MyViewer::moveCameraDown() {
+	camera().eye.y -= 0.1f;
+	camera().center.y -= 0.1f;
+	camera().up.y -= 0.1f;
+	render();
+	ws_check();
 }
 
 // Below is an example of how to control the main loop of an animation:
@@ -226,6 +261,17 @@ int MyViewer::handle_keyboard ( const GsEvent &e )
 	switch ( e.key )
 	{	case GsEvent::KeyEsc : gs_exit(); return 1;
 		case 'n' : { bool b=!_nbut->value(); _nbut->value(b); show_normals(b); return 1; }
+		case GsEvent::KeyLeft: {
+			// for Debug mode only
+			gsout << "camera: " << camera() << gsnl;
+			moveCameraLeft(); 
+			return 1;
+		}
+		case GsEvent::KeyUp:moveCameraUp(); return 1;
+		case GsEvent::KeyRight:moveCameraRight(); return 1;
+		case GsEvent::KeyDown:moveCameraDown(); return 1;
+
+		
 		default: gsout<<"Key pressed: "<<e.key<<gsnl;
 	}
 

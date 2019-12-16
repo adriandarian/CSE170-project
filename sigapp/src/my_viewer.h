@@ -29,7 +29,11 @@ protected:
 	};
 	UiCheckButton *_nbut;
 	bool _animating;
+	
+	// Camera Global Variables
 	bool cameraMovement = true;
+	float cameraX = 0, cameraY = 0, cameraZ = 0;
+
 	float xTwoStoryHouse = 0.0, yTwoStoryHouse = 0.0, zTwoStoryHouse = 0.0;
 	float xBody = 0.0, yBody = 0.0, zBody = 0.0;
 	float xRightArm = 0.0, yRightArm = 0.0, zRightArm = 0.0;
@@ -69,6 +73,10 @@ public:
 	void add_model(SnShape *s, GsVec p);
 	void build_scene();
 	void show_normals(bool view);
+	void moveCameraLeft();
+	void moveCameraUp();
+	void moveCameraRight();
+	void moveCameraDown();
 	void run_animation();
 	virtual int handle_keyboard(const GsEvent &e) override;
 	virtual int uievent(int e) override;
