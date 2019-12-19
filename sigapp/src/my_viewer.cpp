@@ -16,6 +16,16 @@ MyViewer::MyViewer(int x, int y, int w, int h, const char *l) : WsViewer(x, y, w
 	cameraY = camera().center.y;
 	cameraZ = camera().center.z;
 
+	maManip = new SnManipulator;
+	maManip1 = new SnManipulator;
+	maManip2 = new SnManipulator;
+	maManip3 = new SnManipulator;
+	maManip4 = new SnManipulator;
+	maManip5 = new SnManipulator;
+	maManip6 = new SnManipulator;
+	maManip7 = new SnManipulator;
+	maManip8 = new SnManipulator;
+
 	build_ui();
 	build_scene();
 }
@@ -35,31 +45,31 @@ void MyViewer::build_ui()
 	p->top()->separate();
 }
 
-void MyViewer::add_model(SnShape *s, GsVec p)
+void MyViewer::add_model(SnShape *shape, GsVec point)
 {
-	SnManipulator *manip = new SnManipulator;
-	GsMat m;
-	m.translation(p);
-	manip->initial_mat(m);
-	SnManipulator *shadow = new SnManipulator;
-	
+	SnManipulator *manipulator = new SnManipulator;
+	GsMat matrix;
+	matrix.translation(point);
+	manipulator->initial_mat(matrix);
+	SnManipulator *ShadowManipulator = new SnManipulator;
+	GsMat ShadowMatrix;
 
-	shad.set(shadowPoints);
-	shad.rcombtrans(p);
+	ShadowMatrix.set(shadowPoints);
+	ShadowMatrix.rcombtrans(point);
 
-	shadow->initial_mat(shad);
+	ShadowManipulator->initial_mat(ShadowMatrix);
 
-	SnGroup *g = new SnGroup;
-	SnLines *l = new SnLines;
-	l->color(GsColor::orange);
-	g->add(s);
-	g->add(l);
-	manip->child(g);
-	shadow->child(g);
-	rootg()->add(manip);
-	rootg()->add(shadow);
+	SnGroup *group = new SnGroup;
+	SnLines *lines = new SnLines;
+	lines->color(GsColor::orange);
+	group->add(shape);
+	group->add(lines);
+	manipulator->child(group);
+	// ShadowManipulator->child(group);
+	rootg()->add(manipulator);
+	// rootg()->add(ShadowManipulator);
 
-	rootg()->add(manip);
+	rootg()->add(manipulator);
 }
 
 void MyViewer::build_scene()
@@ -76,11 +86,40 @@ void MyViewer::build_scene()
 	// GsModel *GrassModel = Grass->model();
 	// GrassModel->scale(10000);
 	// rootg()->add(Grass);
-	
-	
+
+	// SnModel *TwoStoryHouse = new SnModel;
+	// if (!TwoStoryHouse->model()->load("../src/Objects/mushroom-house.obj"))
+	// {
+	// 	gsout << "TwoStoryHouse was not loaded" << gsnl;
+	// }
+	// // TwoStoryHouse->color(GsColor::green);
+	// GsModel *TwoStoryHouseModel = TwoStoryHouse->model();
+	// TwoStoryHouse->model()->get_bounding_box(house1);
+	// TwoStoryHouseModel->scale(1);
+	// add_model(TwoStoryHouse, GsVec(xTwoStoryHouse, yTwoStoryHouse, zTwoStoryHouse));
+
+	// SnModel *TwoStoryHouse1 = new SnModel;
+	// if (!TwoStoryHouse1->model()->load("../src/Objects/mushroom-house.obj"))
+	// {
+	// 	gsout << "TwoStoryHouse was not loaded" << gsnl;
+	// }
+	// // TwoStoryHouse->color(GsColor::green);
+	// GsModel *TwoStoryHouseModel1 = TwoStoryHouse1->model();
+	// TwoStoryHouseModel1->scale(1);
+	// //add_model(TwoStoryHouse1, GsVec(20000.0F, 0.0F, 20000.0F));
+
+	// SnModel *TwoStoryHouse3 = new SnModel;
+	// if (!TwoStoryHouse3->model()->load("../src/Objects/mushroom-house.obj"))
+	// {
+	// 	gsout << "TwoStoryHouse was not loaded" << gsnl;
+	// }
+	// // TwoStoryHouse->color(GsColor::green);
+	// GsModel *TwoStoryHouseModel3 = TwoStoryHouse3->model();
+	// TwoStoryHouseModel3->scale(1);
+	// add_model(TwoStoryHouse3, GsVec(-20000.0f, 0.0f, 0.0f));
 
 	SnModel *TwoStoryHouse = new SnModel;
-	if (!TwoStoryHouse->model()->load("../src/Objects/mushroom-house.obj"))
+	if (!TwoStoryHouse->model()->load("../src/Objects/village2.0.obj"))
 	{
 		gsout << "TwoStoryHouse was not loaded" << gsnl;
 	}
@@ -90,49 +129,170 @@ void MyViewer::build_scene()
 	TwoStoryHouseModel->scale(1);
 	add_model(TwoStoryHouse, GsVec(xTwoStoryHouse, yTwoStoryHouse, zTwoStoryHouse));
 
-	SnModel *TwoStoryHouse1 = new SnModel;
-	if (!TwoStoryHouse1->model()->load("../src/Objects/mushroom-house.obj"))
-	{
-		gsout << "TwoStoryHouse was not loaded" << gsnl;
-	}
-	// TwoStoryHouse->color(GsColor::green);
-	GsModel *TwoStoryHouseModel1 = TwoStoryHouse1->model();
-	TwoStoryHouse1->model()->get_bounding_box(house2);
-	TwoStoryHouseModel1->scale(1);
-	add_model(TwoStoryHouse1, GsVec(20000.0F, 0.0F, 20000.0F));
+	// snMario = new SnModel;
 
-	SnModel *TwoStoryHouse3 = new SnModel;
-	if (!TwoStoryHouse3->model()->load("../src/Objects/mushroom-house.obj"))
-	{
-		gsout << "TwoStoryHouse was not loaded" << gsnl;
-	}
-	// TwoStoryHouse->color(GsColor::green);
-	GsModel *TwoStoryHouseModel3 = TwoStoryHouse3->model();
-	TwoStoryHouseModel3->scale(1);
-	add_model(TwoStoryHouse3, GsVec(-20000.0f, 0.0f, 0.0f));
+	// if (!snMario->model()->load("../src/objects/goomba.obj"))
+	// {
+	// 	gsout << "Goomba model was not loaded" << gsnl;
+	// }
 
-	//this one is sideways
+	// gsMario.translation(mover);
 
-	//SnModel* House = new SnModel;
-	//if (!House->model()->load("../src/Objects/20951_Mushroom_v2_NEW.obj")) {
-	//	gsout << "house was not loaded" << gsnl;
-	//}
-	//// TwoStoryHouse->color(GsColor::green);
-	//GsModel* House1 = House->model();
-	//House1->scale(3000);
-	//add_model(House, GsVec(-20000.0f, 10.0f, 30000.0f));
+	// SnGroup *maGroup = new SnGroup;
+	// maManip->visible(false);
+	// maManip->initial_mat(gsMario);
+	// maGroup->add(snMario);
+	// maManip->child(maGroup);
+
+	// rootg()->add(maManip);
+
+	// snMario1 = new SnModel;
+
+	// if (!snMario1->model()->load("../src/objects/goomba.obj"))
+	// {
+	// 	gsout << "Goomba model was not loaded" << gsnl;
+	// }
+
+	// gsMario1.translation(mover1);
+
+	// SnGroup *maGroup1 = new SnGroup;
+	// maManip1->initial_mat(gsMario1);
+	// maManip1->visible(false);
+	// maGroup1->add(snMario1);
+	// maManip1->child(maGroup1);
+
+	// rootg()->add(maManip1);
+
+	// snMario2 = new SnModel;
+
+	// if (!snMario2->model()->load("../src/objects/goomba.obj"))
+	// {
+	// 	gsout << "Goomba model was not loaded" << gsnl;
+	// }
+
+	// gsMario2.translation(mover2);
+
+	// SnGroup *maGroup2 = new SnGroup;
+	// maManip2->visible(false);
+	// maManip2->initial_mat(gsMario2);
+	// maGroup2->add(snMario2);
+	// maManip2->child(maGroup2);
+
+	// rootg()->add(maManip2);
+
+	// snMario3 = new SnModel;
+
+	// if (!snMario3->model()->load("../src/objects/goomba.obj"))
+	// {
+	// 	gsout << "Goomba model was not loaded" << gsnl;
+	// }
+
+	// gsMario3.translation(mover3);
+
+	// SnGroup *maGroup3 = new SnGroup;
+	// maManip3->visible(false);
+	// maManip3->initial_mat(gsMario3);
+	// maGroup3->add(snMario3);
+	// maManip3->child(maGroup3);
+
+	// rootg()->add(maManip3);
+
+	// snMario4 = new SnModel;
+
+	// if (!snMario4->model()->load("../src/objects/goomba.obj"))
+	// {
+	// 	gsout << "Goomba model was not loaded" << gsnl;
+	// }
+
+	// gsMario4.translation(mover4);
+
+	// SnGroup *maGroup4 = new SnGroup;
+	// maManip4->visible(false);
+	// maManip4->initial_mat(gsMario4);
+	// maGroup4->add(snMario4);
+	// maManip4->child(maGroup4);
+
+	// rootg()->add(maManip4);
+
+	// snMario5 = new SnModel;
+
+	// if (!snMario5->model()->load("../src/objects/goomba.obj"))
+	// {
+	// 	gsout << "Goomba model was not loaded" << gsnl;
+	// }
+
+	// gsMario5.translation(mover5);
+
+	// SnGroup *maGroup5 = new SnGroup;
+	// maManip5->visible(false);
+	// maManip5->initial_mat(gsMario5);
+	// maGroup5->add(snMario5);
+	// maManip5->child(maGroup5);
+
+	// rootg()->add(maManip5);
+
+	// snMario6 = new SnModel;
+
+	// if (!snMario6->model()->load("../src/objects/goomba.obj"))
+	// {
+	// 	gsout << "Goomba model was not loaded" << gsnl;
+	// }
+
+	// gsMario6.translation(mover6);
+
+	// SnGroup *maGroup6 = new SnGroup;
+	// maManip6->visible(false);
+	// maManip6->initial_mat(gsMario6);
+	// maGroup6->add(snMario6);
+	// maManip6->child(maGroup6);
+
+	// rootg()->add(maManip6);
+
+	// snMario7 = new SnModel;
+
+	// if (!snMario7->model()->load("../src/objects/goomba.obj"))
+	// {
+	// 	gsout << "Goomba model was not loaded" << gsnl;
+	// }
+
+	// gsMario7.translation(mover7);
+
+	// SnGroup *maGroup7 = new SnGroup;
+	// maManip7->visible(false);
+	// maManip7->initial_mat(gsMario7);
+	// maGroup7->add(snMario7);
+	// maManip7->child(maGroup7);
+
+	// rootg()->add(maManip7);
+
+	// snMario8 = new SnModel;
+
+	// if (!snMario8->model()->load("../src/objects/goomba.obj"))
+	// {
+	// 	gsout << "Goomba model was not loaded" << gsnl;
+	// }
+
+	// gsMario8.translation(mover8);
+
+	// SnGroup *maGroup8 = new SnGroup;
+	// maManip8->visible(false);
+	// maManip8->initial_mat(gsMario8);
+	// maGroup8->add(snMario8);
+	// maManip8->child(maGroup8);
+
+	// rootg()->add(maManip8);
 }
 
 void MyViewer::move_camera_right()
 {
-	camera().translate(GsVec(cameraX + cameraAdjustment, cameraY, cameraZ));
+	camera().translate(GsVec(cameraX - cameraAdjustment, cameraY, cameraZ));
 	render();
 	ws_check();
 }
 
 void MyViewer::move_camera_left()
 {
-	camera().translate(GsVec(cameraX - cameraAdjustment, cameraY, cameraZ));
+	camera().translate(GsVec(cameraX + cameraAdjustment, cameraY, cameraZ));
 	render();
 	ws_check();
 }
@@ -165,10 +325,16 @@ void MyViewer::camera_zoom_out()
 	ws_check();
 }
 
+void MyViewer::rotate_camera_right()
+{
+	camera().rotate(GsQuat());
+	render();
+	ws_check();
+}
+
 void MyViewer::move_sun_right()
 {
 	shadowPoints[1] += 1;
-	shad.set(shadowPoints);
 	render();
 	ws_check();
 }
@@ -180,40 +346,455 @@ void MyViewer::move_sun_left()
 	ws_check();
 }
 
-void MyViewer::move_sun_up() {
+void MyViewer::move_sun_up()
+{
 	shadowPoints[9] += 1;
 	render();
 	ws_check();
 }
 
-void MyViewer::move_sun_down() {
+void MyViewer::move_sun_down()
+{
 	shadowPoints[9] -= 1;
 	render();
 	ws_check();
 }
 
+void MyViewer::moveLeft()
+{
+	mover.x -= 0.05f;
+
+	gsMario.translation(mover);
+
+	maManip->initial_mat(gsMario);
+
+	mover1.x += 0.05f;
+
+	gsMario1.translation(mover1);
+
+	maManip1->initial_mat(gsMario1);
+
+	mover2.x += 0.05f;
+
+	gsMario2.translation(mover2);
+
+	maManip2->initial_mat(gsMario2);
+
+	mover3.x -= 0.05f;
+
+	gsMario3.translation(mover3);
+
+	maManip3->initial_mat(gsMario3);
+
+	mover4.x -= 0.05f;
+
+	gsMario4.translation(mover4);
+
+	maManip4->initial_mat(gsMario4);
+
+	mover5.x -= 0.05f;
+
+	gsMario5.translation(mover5);
+
+	maManip5->initial_mat(gsMario5);
+
+	mover6.x -= 0.05f;
+
+	gsMario6.translation(mover6);
+
+	maManip6->initial_mat(gsMario6);
+
+	mover7.x += 0.05f;
+
+	gsMario7.translation(mover7);
+
+	maManip7->initial_mat(gsMario7);
+
+	mover8.x -= 0.05f;
+
+	gsMario8.translation(mover8);
+
+	maManip8->initial_mat(gsMario8);
+
+	redraw();
+}
+
+void MyViewer::moveRight()
+{
+	mover.x += 0.05f;
+
+	gsMario.translation(mover);
+
+	maManip->initial_mat(gsMario);
+
+	mover1.x -= 0.05f;
+
+	gsMario1.translation(mover1);
+
+	maManip1->initial_mat(gsMario1);
+
+	mover2.x -= 0.05f;
+
+	gsMario2.translation(mover2);
+
+	maManip2->initial_mat(gsMario2);
+
+	mover3.x += 0.05f;
+
+	gsMario3.translation(mover3);
+
+	maManip3->initial_mat(gsMario3);
+
+	mover4.x += 0.05f;
+
+	gsMario4.translation(mover4);
+
+	maManip4->initial_mat(gsMario4);
+
+	mover5.x += 0.05f;
+
+	gsMario5.translation(mover5);
+
+	maManip5->initial_mat(gsMario5);
+
+	mover6.x += 0.05f;
+
+	gsMario6.translation(mover6);
+
+	maManip6->initial_mat(gsMario6);
+
+	mover7.x -= 0.05f;
+
+	gsMario7.translation(mover7);
+
+	maManip7->initial_mat(gsMario7);
+
+	mover8.x += 0.05f;
+
+	gsMario8.translation(mover8);
+
+	maManip8->initial_mat(gsMario8);
+
+	redraw();
+}
+
+void MyViewer::moveUp()
+{
+	mover.y -= 0.05f;
+
+	gsMario.translation(mover);
+
+	maManip->initial_mat(gsMario);
+
+	mover1.y += 0.05f;
+
+	gsMario1.translation(mover1);
+
+	maManip1->initial_mat(gsMario1);
+
+	mover2.y += 0.05f;
+
+	gsMario2.translation(mover2);
+
+	maManip2->initial_mat(gsMario2);
+
+	mover3.y -= 0.05f;
+
+	gsMario3.translation(mover3);
+
+	maManip3->initial_mat(gsMario3);
+
+	mover4.y -= 0.05f;
+
+	gsMario4.translation(mover4);
+
+	maManip4->initial_mat(gsMario4);
+
+	mover5.y -= 0.05f;
+
+	gsMario5.translation(mover5);
+
+	maManip5->initial_mat(gsMario5);
+
+	mover6.y -= 0.05f;
+
+	gsMario6.translation(mover6);
+
+	maManip6->initial_mat(gsMario6);
+
+	mover7.y += 0.05f;
+
+	gsMario7.translation(mover7);
+
+	maManip7->initial_mat(gsMario7);
+
+	mover8.y -= 0.05f;
+
+	gsMario8.translation(mover8);
+
+	maManip8->initial_mat(gsMario8);
+
+	redraw();
+}
+
+void MyViewer::moveDown()
+{
+	mover.y += 0.05f;
+
+	gsMario.translation(mover);
+
+	maManip->initial_mat(gsMario);
+
+	mover1.y -= 0.05f;
+
+	gsMario1.translation(mover1);
+
+	maManip1->initial_mat(gsMario1);
+
+	mover2.y -= 0.05f;
+
+	gsMario2.translation(mover2);
+
+	maManip2->initial_mat(gsMario2);
+
+	mover3.y += 0.05f;
+
+	gsMario3.translation(mover3);
+
+	maManip3->initial_mat(gsMario3);
+
+	mover4.y += 0.05f;
+
+	gsMario4.translation(mover4);
+
+	maManip4->initial_mat(gsMario4);
+
+	mover5.y += 0.05f;
+
+	gsMario5.translation(mover5);
+
+	maManip5->initial_mat(gsMario5);
+
+	mover6.y += 0.05f;
+
+	gsMario6.translation(mover6);
+
+	maManip6->initial_mat(gsMario6);
+
+	mover7.y -= 0.05f;
+
+	gsMario7.translation(mover7);
+
+	maManip7->initial_mat(gsMario7);
+
+	mover8.y += 0.05f;
+
+	gsMario8.translation(mover7);
+
+	maManip8->initial_mat(gsMario8);
+
+	redraw();
+}
+
+void MyViewer::jumpUp()
+{
+	mover.z += 0.05f;
+
+	gsMario.translation(mover);
+
+	maManip->initial_mat(gsMario);
+
+	mover1.z += 0.05f;
+
+	gsMario1.translation(mover1);
+
+	maManip1->initial_mat(gsMario1);
+
+	mover2.z += 0.05f;
+
+	gsMario2.translation(mover2);
+
+	maManip2->initial_mat(gsMario2);
+
+	mover3.z += 0.05f;
+
+	gsMario3.translation(mover3);
+
+	maManip3->initial_mat(gsMario3);
+
+	mover4.z += 0.05f;
+
+	gsMario4.translation(mover4);
+
+	maManip4->initial_mat(gsMario4);
+
+	mover5.z += 0.05f;
+
+	gsMario5.translation(mover5);
+
+	maManip5->initial_mat(gsMario5);
+
+	mover6.z += 0.05f;
+
+	gsMario6.translation(mover6);
+
+	maManip6->initial_mat(gsMario6);
+
+	mover7.z += 0.05f;
+
+	gsMario7.translation(mover7);
+
+	maManip7->initial_mat(gsMario7);
+
+	mover8.z += 0.05f;
+
+	gsMario8.translation(mover8);
+
+	maManip8->initial_mat(gsMario8);
+
+	redraw();
+}
+
+void MyViewer::jumpDown()
+{
+	mover.z -= 0.05f;
+
+	gsMario.translation(mover);
+
+	maManip->initial_mat(gsMario);
+
+	mover1.z -= 0.05f;
+
+	gsMario1.translation(mover1);
+
+	maManip1->initial_mat(gsMario1);
+
+	mover2.z -= 0.05f;
+
+	gsMario2.translation(mover2);
+
+	maManip2->initial_mat(gsMario2);
+
+	mover3.z -= 0.05f;
+
+	gsMario3.translation(mover3);
+
+	maManip3->initial_mat(gsMario3);
+
+	mover4.z -= 0.05f;
+
+	gsMario3.translation(mover4);
+
+	maManip4->initial_mat(gsMario4);
+
+	mover5.z -= 0.05f;
+
+	gsMario5.translation(mover5);
+
+	maManip5->initial_mat(gsMario5);
+
+	mover6.z -= 0.05f;
+
+	gsMario6.translation(mover6);
+
+	maManip6->initial_mat(gsMario6);
+
+	mover7.z -= 0.05f;
+
+	gsMario7.translation(mover7);
+
+	maManip7->initial_mat(gsMario7);
+
+	mover8.z -= 0.05f;
+
+	gsMario8.translation(mover8);
+
+	maManip8->initial_mat(gsMario8);
+
+	redraw();
+}
+
 // Below is an example of how to control the main loop of an animation:
 void MyViewer::run_animation()
 {
-	if (_animating) return; // avoid recursive calls
+	if (_animating)
+		return; // avoid recursive calls
 	_animating = true;
 
 	double frdt = 1.0 / 30.0; // delta time to reach given number of frames per second
 	double time = 0, lt = 0, t0 = gs_time();
 	do // run for a while:
 	{
-		while (time - lt < frdt) { ws_check(); time = gs_time() - t0; } // wait until it is time for next frame
+		while (time - lt < frdt)
+		{
+			ws_check();
+			time = gs_time() - t0;
+		} // wait until it is time for next frame
 		lt = time;
-		if (time < 20) {
-			if (time < 1) {
-				camera().translate(GsVec(cameraX , cameraY, cameraZ - cameraAdjustment));
-				render();
+		while (time - lt < frdt)
+		{
+			ws_check();
+			time = gs_time() - t0;
+		}
+		lt = time;
+
+		if (time < 20)
+		{
+			if (time < 1)
+			{
+				moveUp();
 				ws_check();
 			}
-			if (time > 1 && time < 6) {
-				//camera().rotate(GsQuat(0.0f, 0.0f, 0.0f, 0.005f));
-				render();
+			if (time > 1 && time < 2)
+			{
+				moveRight();
 				ws_check();
+			}
+			if (time > 3 && time < 4)
+			{
+				moveDown();
+				ws_check();
+			}
+			if (time > 4 && time < 5)
+			{
+				moveLeft();
+				ws_check();
+			}
+			if (time > 6 && time < 7)
+			{
+				jumpUp();
+				ws_check();
+			}
+			if (time > 7 && time < 8)
+			{
+				jumpDown();
+				ws_check();
+			}
+			if (time > 8 && time < 9)
+			{
+				moveUp();
+				ws_check();
+			}
+			if (time > 9 && time < 10)
+			{
+				moveRight();
+				ws_check();
+			}
+			if (time > 10 && time < 11)
+			{
+				moveDown();
+				ws_check();
+			}
+			if (time > 11 && time < 12)
+			{
+				moveLeft();
+				ws_check();
+			}
+			if (time > 12 && time < 13)
+			{
+				time = 0;
+				lt = 0;
+				t0 = gs_time();
 			}
 		}
 	} while (time < 30);
@@ -268,18 +849,20 @@ int MyViewer::handle_keyboard(const GsEvent &e)
 		return ret;
 
 	// for Debug mode only
-	// gsout << "Camera: " << camera() << gsnl;
-	//gsout << "Shadow: ";
-	for (int i = 0; i < sizeof(shadowPoints)/sizeof(shadowPoints[0]); i++) {
-		if (i%4 == 0) gsnl;
-		//gsout << shadowPoints[i] << ", ";
-	}
+	gsout << "Camera: " << camera() << gsnl;
+	// gsout << "Shadow: ";
+	// for (int i = 0; i < sizeof(shadowPoints)/sizeof(shadowPoints[0]); i++) {
+	// 	if (i%4 == 0) gsout << gsnl;
+	// 	gsout << shadowPoints[i] << ", ";
+	// }
 
 	switch (e.key)
 	{
 	case GsEvent::KeyEsc:
+	{
 		gs_exit();
 		return 1;
+	}
 	case 'n':
 	{
 		bool b = !_nbut->value();
@@ -289,16 +872,8 @@ int MyViewer::handle_keyboard(const GsEvent &e)
 	}
 	case GsEvent::KeyLeft:
 	{
-		if (camera().center.x > -6000 && camera().center.x <= 6000 && camera().center.z < -58652.7f && camera().center.z > -73000.0f)	{
-			gsout << "Limit Reached" << gsnl;
-			
-			return 1;
-		}
-
-		else {
-			move_camera_left();
-			return 1;
-		}
+		move_camera_left();
+		return 1;
 	}
 	case GsEvent::KeyUp:
 	{
@@ -306,48 +881,23 @@ int MyViewer::handle_keyboard(const GsEvent &e)
 		return 1;
 	}
 	case GsEvent::KeyRight:
-	{if (camera().center.x > -6000 && camera().center.x < 6000 && camera().center.z < -58652.7f && camera().center.z > -72000.0f) {
-		gsout << "Limit Reached" << gsnl;
-
-		return 1;
-	}
-
-	else {
+	{
 		move_camera_right();
 		return 1;
-	}
 	}
 	case GsEvent::KeyDown:
 	{
 		move_camera_down();
 		return 1;
 	}
-	case 'c': {
-		gsout  << "Bounding Box: " << house1.dx() << ", " << house1.dy() << ", " << house1.dz() << gsnl;
-		gsout << "Camera: " << camera().center << gsnl << gsnl;
-		gsout << "z - 7000" << house1.dz() - 70000.0f << gsnl;
-		return 1;
-	}
 	case 'q':
 	{
-		
-		if (camera().center.x >= -6000 && camera().center.x <= 6000 && camera().center.z < -58652.7f) {
-			gsout << "Limit Reached" << gsnl;
-			return 1;
-		}
-		else {
-			camera_zoom_in();
-		}
+		camera_zoom_in();
 		return 1;
 	}
 	case 'e':
-	{	if (camera().center.x >= -6000 && camera().center.x <= 6000 && camera().center.z < -59652.7f && camera().center.z > -73000.0f) {
-		gsout << "Limit Reached" << gsnl;
-		return 1;
-	}
-	else {
+	{
 		camera_zoom_out();
-	}
 		return 1;
 	}
 	case 'w':
@@ -371,13 +921,10 @@ int MyViewer::handle_keyboard(const GsEvent &e)
 		return 1;
 	}
 	default:
+	{
 		gsout << "Key pressed: " << e.key << gsnl;
 	}
-
-	// if ( update )
-	// {	_gLight->get<SnTransform>(0)->get().setrans(lightPos);
-	// 	update_shadow ();
-	// }
+	}
 
 	return 0;
 }

@@ -62,7 +62,6 @@ protected:
 		1  // ?
 	};
 
-	GsMat shad;
 	// Object Global Variables
 	float xTwoStoryHouse = 0.0,
 		  yTwoStoryHouse = 0.0, zTwoStoryHouse = 0.0;
@@ -80,6 +79,57 @@ protected:
 		"mushroom-house.obj",
 	};
 
+	GsVec mover = GsVec(0.0f, 0.0f, 0.0f);
+	GsVec mover1 = GsVec(4.4f, 4.4f, 0.0f);
+	GsVec mover2 = GsVec(4.4f, 0.0f, 0.0f);
+	GsVec mover3 = GsVec(0.0f, 4.4f, 0.0f);
+	GsVec mover4 = GsVec(0.0f, 8.8f, 0.0f);
+	GsVec mover5 = GsVec(8.8f, 8.8f, 0.0f);
+	GsVec mover6 = GsVec(8.8f, 0.0f, 0.0f);
+	GsVec mover7 = GsVec(4.4f, 8.8f, 0.0f);
+	GsVec mover8 = GsVec(8.8f, 4.4f, 0.0f);
+
+	GsMat gsMario;
+	SnModel *snMario;
+	SnManipulator *maManip;
+
+	GsMat gsMario1;
+	SnModel *snMario1;
+	SnManipulator *maManip1;
+
+	GsMat gsMario2;
+	SnModel *snMario2;
+	SnManipulator *maManip2;
+
+	GsMat gsMario3;
+	SnModel *snMario3;
+	SnManipulator *maManip3;
+
+	GsMat gsMario4;
+	SnModel *snMario4;
+	SnManipulator *maManip4;
+
+	GsMat gsMario5;
+	SnModel *snMario5;
+	SnManipulator *maManip5;
+
+	GsMat gsMario6;
+	SnModel *snMario6;
+	SnManipulator *maManip6;
+
+	GsMat gsMario7;
+	SnModel *snMario7;
+	SnManipulator *maManip7;
+
+	GsMat gsMario8;
+	SnModel *snMario8;
+	SnManipulator *maManip8;
+
+	bool up;
+	bool down;
+	bool left;
+	bool right;
+
 public:
 	MyViewer(int x, int y, int w, int h, const char *l);
 	void build_ui();
@@ -92,10 +142,18 @@ public:
 	void move_camera_down();
 	void camera_zoom_in();
 	void camera_zoom_out();
+	void rotate_camera_right();
+	void rotate_camera_left();
 	void move_sun_right();
 	void move_sun_left();
 	void move_sun_up();
 	void move_sun_down();
+	void moveLeft();
+	void moveRight();
+	void moveUp();
+	void moveDown();
+	void jumpUp();
+	void jumpDown();
 	void run_animation();
 	virtual int handle_keyboard(const GsEvent &e) override;
 	virtual int uievent(int e) override;
