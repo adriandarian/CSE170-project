@@ -29,3 +29,7 @@
 *.exe
 *.out
 *.app
+
+# Visual Studio Config
+*/vs2017
+*/vs2019

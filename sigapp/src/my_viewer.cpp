@@ -1,46 +1,48 @@
-# include "my_viewer.h"
+#include "my_viewer.h"
 
-# include <sigogl/ui_button.h>
-# include <sigogl/ui_radio_button.h>
-# include <sig/sn_primitive.h>
-# include <sig/sn_transform.h>
-# include <sig/sn_manipulator.h>
+#include <sigogl/ui_button.h>
+#include <sigogl/ui_radio_button.h>
+#include <sig/sn_primitive.h>
+#include <sig/sn_transform.h>
+#include <sig/sn_manipulator.h>
 
-# include <sigogl/ws_run.h>
+#include <sigogl/ws_run.h>
 
-MyViewer::MyViewer ( int x, int y, int w, int h, const char* l ) : WsViewer(x,y,w,h,l)
+MyViewer::MyViewer(int x, int y, int w, int h, const char *l) : WsViewer(x, y, w, h, l)
 {
-	_nbut=0;
-	_animating=false;
+	_nbut = 0;
+	_animating = false;
 	cameraX = camera().center.x;
 	cameraY = camera().center.y;
 	cameraZ = camera().center.z;
 
-	build_ui ();
-	build_scene ();
+	build_ui();
+	build_scene();
 }
 
-void MyViewer::build_ui ()
+void MyViewer::build_ui()
 {
 	UiPanel *p, *sp;
-	UiManager* uim = WsWindow::uim();
-	p = uim->add_panel ( "", UiPanel::HorizLeft );
-	p->add ( new UiButton ( "View", sp=new UiPanel() ) );
-	{	UiPanel* p=sp;
-		p->add ( _nbut=new UiCheckButton ( "Normals", EvNormals ) ); 
+	UiManager *uim = WsWindow::uim();
+	p = uim->add_panel("", UiPanel::HorizLeft);
+	p->add(new UiButton("View", sp = new UiPanel()));
+	{
+		UiPanel *p = sp;
+		p->add(_nbut = new UiCheckButton("Normals", EvNormals));
 	}
-	p->add ( new UiButton ( "Animate", EvAnimate ) );
-	p->add ( new UiButton ( "Exit", EvExit ) ); p->top()->separate();
+	p->add(new UiButton("Animate", EvAnimate));
+	p->add(new UiButton("Exit", EvExit));
+	p->top()->separate();
 }
 
-void MyViewer::add_model ( SnShape* s, GsVec p )
+void MyViewer::add_model(SnShape *s, GsVec p)
 {
-	SnManipulator* manip = new SnManipulator;
+	SnManipulator *manip = new SnManipulator;
 	GsMat m;
 	GsMat r;
 	m.translation(p);
 	manip->initial_mat(m);
-	SnManipulator* shadow = new SnManipulator;
+	SnManipulator *shadow = new SnManipulator;
 	GsMat shad;
 
 	shad.setl1(1, -8 / 5, 0, 0);
@@ -51,8 +53,8 @@ void MyViewer::add_model ( SnShape* s, GsVec p )
 
 	shadow->initial_mat(shad);
 
-	SnGroup* g = new SnGroup;
-	SnLines* l = new SnLines;
+	SnGroup *g = new SnGroup;
+	SnLines *l = new SnLines;
 	l->color(GsColor::orange);
 	g->add(s);
 	g->add(l);
@@ -64,7 +66,6 @@ void MyViewer::add_model ( SnShape* s, GsVec p )
 	rootg()->add(manip);
 
 	//FUNCTION FOR animations that move around
-
 
 	//camera FUNCTIONS :) FROM PREVIOUS PROJECT WILL NEED TO IMPLENTENT LATER
 	//double frdt = 1.0 / 30.0;
@@ -99,57 +100,59 @@ void MyViewer::add_model ( SnShape* s, GsVec p )
 	//}
 }
 
-void MyViewer::build_scene ()
+void MyViewer::build_scene()
 {
 	// Re-initialize the scene before drawing.
 	rootg()->remove_all();
 
-	SnModel *Grass = new SnModel;//grass
-	if (!Grass->model()->load("../src/Objects/grassPatch.obj")) {
+	SnModel *Grass = new SnModel; //grass
+	if (!Grass->model()->load("../src/Objects/grassPatch.obj"))
+	{
 		gsout << "Grass was not loaded" << gsnl;
 	}
 	Grass->color(GsColor::green);
-	GsModel* GrassModel = Grass->model();
+	GsModel *GrassModel = Grass->model();
 	GrassModel->scale(10000);
-	rootg()->add(Grass); 
+	rootg()->add(Grass);
 
 	SnModel *TwoStoryHouse = new SnModel;
-	if (!TwoStoryHouse->model()->load("../src/Objects/mushroom-house.obj")) {
+	if (!TwoStoryHouse->model()->load("../src/Objects/mushroom-house.obj"))
+	{
 		gsout << "TwoStoryHouse was not loaded" << gsnl;
 	}
 	// TwoStoryHouse->color(GsColor::green);
-	GsModel* TwoStoryHouseModel = TwoStoryHouse->model();
+	GsModel *TwoStoryHouseModel = TwoStoryHouse->model();
 	TwoStoryHouseModel->scale(1);
 	add_model(TwoStoryHouse, GsVec(xTwoStoryHouse, yTwoStoryHouse, zTwoStoryHouse));
 
-	SnModel* TwoStoryHouse1 = new SnModel;
-	if (!TwoStoryHouse1->model()->load("../src/Objects/mushroom-house.obj")) {
+	SnModel *TwoStoryHouse1 = new SnModel;
+	if (!TwoStoryHouse1->model()->load("../src/Objects/mushroom-house.obj"))
+	{
 		gsout << "TwoStoryHouse was not loaded" << gsnl;
 	}
 	// TwoStoryHouse->color(GsColor::green);
-	GsModel* TwoStoryHouseModel1 = TwoStoryHouse1->model();
+	GsModel *TwoStoryHouseModel1 = TwoStoryHouse1->model();
 	TwoStoryHouseModel1->scale(1);
 	add_model(TwoStoryHouse1, GsVec(20000.0F, 0.0F, 20000.0F));
 
-
 	// ! Trying to load a second mushroom house
 	SnModel *TwoStoryHouse2 = new SnModel;
-	if (!TwoStoryHouse2->model()->load("../src/Objects/mushroom-house-1.obj")) {
-		gsout << "TwoStoryHouse was not loaded" << gsnl;
-	}	
-	// TwoStoryHouse->color(GsColor::green);
-	GsModel* TwoStoryHouseModel2 = TwoStoryHouse2->model();
-	TwoStoryHouseModel2->scale(1);
-	add_model(TwoStoryHouse2, GsVec(3000.0f, 0.0f, -20000.0f));
-
-
-
-	SnModel* TwoStoryHouse3 = new SnModel;
-	if (!TwoStoryHouse3->model()->load("../src/Objects/mushroom-house.obj")) {
+	if (!TwoStoryHouse2->model()->load("../src/Objects/mushroom-house-1.obj"))
+	{
 		gsout << "TwoStoryHouse was not loaded" << gsnl;
 	}
 	// TwoStoryHouse->color(GsColor::green);
-	GsModel* TwoStoryHouseModel3 = TwoStoryHouse3->model();
+	GsModel *TwoStoryHouseModel2 = TwoStoryHouse2->model();
+	TwoStoryHouseModel2->scale(1);
+	add_model(TwoStoryHouse2, GsVec(3000.0f, 0.0f, -20000.0f));
+
+	SnModel *TwoStoryHouse3 = new SnModel;
+	if (!TwoStoryHouse3->model()->load("../src/Objects/mushroom-house.obj"))
+	{
+		gsout << "TwoStoryHouse was not loaded" << gsnl;
+	}
+	// TwoStoryHouse->color(GsColor::green);
+	GsModel *TwoStoryHouseModel3 = TwoStoryHouse3->model();
 	TwoStoryHouseModel3->scale(1);
 	add_model(TwoStoryHouse3, GsVec(-20000.0f, 0.0f, 0.0f));
 
@@ -163,127 +166,193 @@ void MyViewer::build_scene ()
 	//GsModel* House1 = House->model();
 	//House1->scale(3000);
 	//add_model(House, GsVec(-20000.0f, 10.0f, 30000.0f));
-
-
 }
 
-void MyViewer::moveCameraLeft() {
-	camera().translate(GsVec(cameraX - 0.1f, cameraY, cameraZ));
+void MyViewer::move_camera_left()
+{
+	camera().translate(GsVec(cameraX - cameraAdjustment, cameraY, cameraZ));
 	render();
 	ws_check();
 }
 
-
-void MyViewer::moveCameraUp() {
-	camera().eye.z += 0.1f;
-	camera().center.z += 0.1f;
-	camera().up.z += 0.1f;
+void MyViewer::move_camera_right()
+{
+	camera().translate(GsVec(cameraX + cameraAdjustment, cameraY, cameraZ));
 	render();
 	ws_check();
 }
 
-void MyViewer::moveCameraRight() {
-	camera().eye.x -= 0.1f;
-	camera().center.x -= 0.1f;
-	camera().up.x -= 0.1f;
+void MyViewer::move_camera_up()
+{
+	camera().translate(GsVec(cameraX, cameraY + cameraAdjustment, cameraZ));
 	render();
 	ws_check();
 }
 
-void MyViewer::moveCameraDown() {
-	camera().eye.y -= 0.1f;
-	camera().center.y -= 0.1f;
-	camera().up.y -= 0.1f;
+void MyViewer::move_camera_down()
+{
+	camera().translate(GsVec(cameraX, cameraY - cameraAdjustment, cameraZ));
+	render();
+	ws_check();
+}
+
+void MyViewer::camera_zoom_in() {
+	camera().translate(GsVec(cameraX, cameraY, cameraZ - cameraAdjustment));
+	render();
+	ws_check();
+}
+
+void MyViewer::camera_zoom_out() {
+	camera().translate(GsVec(cameraX, cameraY, cameraZ + cameraAdjustment));
 	render();
 	ws_check();
 }
 
 // Below is an example of how to control the main loop of an animation:
-void MyViewer::run_animation ()
+void MyViewer::run_animation()
 {
-	if ( _animating ) return; // avoid recursive calls
+	if (_animating)
+		return; // avoid recursive calls
 	_animating = true;
-	
-	int ind = gs_random ( 0, rootg()->size()-1 ); // pick one child
-	SnManipulator* manip = rootg()->get<SnManipulator>(ind); // access one of the manipulators
+
+	int ind = gs_random(0, rootg()->size() - 1);			 // pick one child
+	SnManipulator *manip = rootg()->get<SnManipulator>(ind); // access one of the manipulators
 	GsMat m = manip->mat();
 
-	double frdt = 1.0/30.0; // delta time to reach given number of frames per second
-	double v = 4; // target velocity is 1 unit per second
-	double t=0, lt=0, t0=gs_time();
+	double frdt = 1.0 / 30.0; // delta time to reach given number of frames per second
+	double v = 4;			  // target velocity is 1 unit per second
+	double t = 0, lt = 0, t0 = gs_time();
 	do // run for a while:
-	{	while ( t-lt<frdt ) { ws_check(); t=gs_time()-t0; } // wait until it is time for next frame
-		double yinc = (t-lt)*v;
-		if ( t>2 ) yinc=-yinc; // after 2 secs: go down
+	{
+		while (t - lt < frdt)
+		{
+			ws_check();
+			t = gs_time() - t0;
+		} // wait until it is time for next frame
+		double yinc = (t - lt) * v;
+		if (t > 2)
+			yinc = -yinc; // after 2 secs: go down
 		lt = t;
 		m.e24 += (float)yinc;
-		if ( m.e24<0 ) m.e24=0; // make sure it does not go below 0
-		manip->initial_mat ( m );
-		render(); // notify it needs redraw
+		if (m.e24 < 0)
+			m.e24 = 0; // make sure it does not go below 0
+		manip->initial_mat(m);
+		render();   // notify it needs redraw
 		ws_check(); // redraw now
-	}	while ( m.e24>0 );
+	} while (m.e24 > 0);
 	_animating = false;
 }
 
-void MyViewer::show_normals ( bool view )
+void MyViewer::show_normals(bool view)
 {
 	// Note that primitives are only converted to meshes in GsModel
 	// at the first draw call.
 	GsArray<GsVec> fn;
-	SnGroup* r = (SnGroup*)root();
-	for ( int k=0; k<r->size(); k++ )
-	{	SnManipulator* manip = r->get<SnManipulator>(k);
-		SnShape* s = manip->child<SnGroup>()->get<SnShape>(0);
-		SnLines* l = manip->child<SnGroup>()->get<SnLines>(1);
-		if ( !view ) { l->visible(false); continue; }
-		l->visible ( true );
-		if ( !l->empty() ) continue; // build only once
+	SnGroup *r = (SnGroup *)root();
+	for (int k = 0; k < r->size(); k++)
+	{
+		SnManipulator *manip = r->get<SnManipulator>(k);
+		SnShape *s = manip->child<SnGroup>()->get<SnShape>(0);
+		SnLines *l = manip->child<SnGroup>()->get<SnLines>(1);
+		if (!view)
+		{
+			l->visible(false);
+			continue;
+		}
+		l->visible(true);
+		if (!l->empty())
+			continue; // build only once
 		l->init();
-		if ( s->instance_name()==SnPrimitive::class_name )
-		{	GsModel& m = *((SnModel*)s)->model();
-			m.get_normals_per_face ( fn );
-			const GsVec* n = fn.pt();
+		if (s->instance_name() == SnPrimitive::class_name)
+		{
+			GsModel &m = *((SnModel *)s)->model();
+			m.get_normals_per_face(fn);
+			const GsVec *n = fn.pt();
 			float f = 0.33f;
-			for ( int i=0; i<m.F.size(); i++ )
-			{	const GsVec& a=m.V[m.F[i].a]; l->push ( a, a+(*n++)*f );
-				const GsVec& b=m.V[m.F[i].b]; l->push ( b, b+(*n++)*f );
-				const GsVec& c=m.V[m.F[i].c]; l->push ( c, c+(*n++)*f );
+			for (int i = 0; i < m.F.size(); i++)
+			{
+				const GsVec &a = m.V[m.F[i].a];
+				l->push(a, a + (*n++) * f);
+				const GsVec &b = m.V[m.F[i].b];
+				l->push(b, b + (*n++) * f);
+				const GsVec &c = m.V[m.F[i].c];
+				l->push(c, c + (*n++) * f);
 			}
-		}  
+		}
 	}
 }
 
-int MyViewer::handle_keyboard ( const GsEvent &e )
+int MyViewer::handle_keyboard(const GsEvent &e)
 {
-	int ret = WsViewer::handle_keyboard ( e ); // 1st let system check events
-	if ( ret ) return ret;
+	int ret = WsViewer::handle_keyboard(e); // 1st let system check events
 
-	switch ( e.key )
-	{	case GsEvent::KeyEsc : gs_exit(); return 1;
-		case 'n' : { bool b=!_nbut->value(); _nbut->value(b); show_normals(b); return 1; }
-		case GsEvent::KeyLeft: {
-			// for Debug mode only
-			gsout << "camera: " << camera() << gsnl;
-			moveCameraLeft(); 
-			return 1;
-		}
-		case GsEvent::KeyUp:moveCameraUp(); return 1;
-		case GsEvent::KeyRight:moveCameraRight(); return 1;
-		case GsEvent::KeyDown:moveCameraDown(); return 1;
+	if (ret)
+		return ret;
 
-		
-		default: gsout<<"Key pressed: "<<e.key<<gsnl;
+	// for Debug mode only
+	gsout << "camera: " << camera() << gsnl;
+
+	switch (e.key)
+	{
+	case GsEvent::KeyEsc:
+		gs_exit();
+		return 1;
+	case 'n':
+	{
+		bool b = !_nbut->value();
+		_nbut->value(b);
+		show_normals(b);
+		return 1;
+	}
+	case GsEvent::KeyLeft:
+	{
+		move_camera_left();
+		return 1;
+	}
+	case GsEvent::KeyUp:
+	{
+		move_camera_up();
+		return 1;
+	}
+	case GsEvent::KeyRight:
+	{
+		move_camera_right();
+		return 1;
+	}
+	case GsEvent::KeyDown:
+	{
+		move_camera_down();
+		return 1;
+	}
+	case  'q':
+	{
+		camera_zoom_in();
+		return 1;
+	}
+	case 'a':
+	{
+		camera_zoom_out();
+		return 1;
+	}
+	default:
+		gsout << "Key pressed: " << e.key << gsnl;
 	}
 
 	return 0;
 }
 
-int MyViewer::uievent ( int e )
+int MyViewer::uievent(int e)
 {
-	switch ( e )
-	{	case EvNormals: show_normals(_nbut->value()); return 1;
-		case EvAnimate: run_animation(); return 1;
-		case EvExit: gs_exit();
+	switch (e)
+	{
+	case EvNormals:
+		show_normals(_nbut->value());
+		return 1;
+	case EvAnimate:
+		run_animation();
+		return 1;
+	case EvExit:
+		gs_exit();
 	}
 	return WsViewer::uievent(e);
 }
