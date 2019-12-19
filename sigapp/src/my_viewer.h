@@ -34,6 +34,9 @@ protected:
 	bool cameraMovement = true;
 	float cameraX = 0, cameraY = 0, cameraZ = 0, cameraAdjustment = 1000.0f;
 
+	// Bounding Box
+	GsBox house1, house2;
+
 	// Shadow Global Variables
 	GsMat shadowPoints = {
 		1, // visibility?

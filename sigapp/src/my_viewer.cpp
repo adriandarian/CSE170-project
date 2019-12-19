@@ -84,6 +84,7 @@ void MyViewer::build_scene()
 	}
 	// TwoStoryHouse->color(GsColor::green);
 	GsModel *TwoStoryHouseModel = TwoStoryHouse->model();
+	TwoStoryHouse->model()->get_bounding_box(house1);
 	TwoStoryHouseModel->scale(1);
 	add_model(TwoStoryHouse, GsVec(xTwoStoryHouse, yTwoStoryHouse, zTwoStoryHouse));
 
@@ -95,7 +96,7 @@ void MyViewer::build_scene()
 	// TwoStoryHouse->color(GsColor::green);
 	GsModel *TwoStoryHouseModel1 = TwoStoryHouse1->model();
 	TwoStoryHouseModel1->scale(1);
-	add_model(TwoStoryHouse1, GsVec(20000.0F, 0.0F, 20000.0F));
+	//add_model(TwoStoryHouse1, GsVec(20000.0F, 0.0F, 20000.0F));
 
 	SnModel *TwoStoryHouse3 = new SnModel;
 	if (!TwoStoryHouse3->model()->load("../src/Objects/mushroom-house.obj"))
@@ -190,35 +191,28 @@ void MyViewer::move_sun_down() {
 // Below is an example of how to control the main loop of an animation:
 void MyViewer::run_animation()
 {
-	if (_animating)
-		return; // avoid recursive calls
+	if (_animating) return; // avoid recursive calls
 	_animating = true;
 
-	int ind = gs_random(0, rootg()->size() - 1);			 // pick one child
-	SnManipulator *manip = rootg()->get<SnManipulator>(ind); // access one of the manipulators
-	GsMat m = manip->mat();
-
 	double frdt = 1.0 / 30.0; // delta time to reach given number of frames per second
-	double v = 4;			  // target velocity is 1 unit per second
-	double t = 0, lt = 0, t0 = gs_time();
+	double time = 0, lt = 0, t0 = gs_time();
 	do // run for a while:
 	{
-		while (t - lt < frdt)
-		{
-			ws_check();
-			t = gs_time() - t0;
-		} // wait until it is time for next frame
-		double yinc = (t - lt) * v;
-		if (t > 2)
-			yinc = -yinc; // after 2 secs: go down
-		lt = t;
-		m.e24 += (float)yinc;
-		if (m.e24 < 0)
-			m.e24 = 0; // make sure it does not go below 0
-		manip->initial_mat(m);
-		render();   // notify it needs redraw
-		ws_check(); // redraw now
-	} while (m.e24 > 0);
+		while (time - lt < frdt) { ws_check(); time = gs_time() - t0; } // wait until it is time for next frame
+		lt = time;
+		if (time < 20) {
+			if (time < 1) {
+				camera().translate(GsVec(cameraX , cameraY, cameraZ - cameraAdjustment));
+				render();
+				ws_check();
+			}
+			if (time > 1 && time < 6) {
+				//camera().rotate(GsQuat(0.0f, 0.0f, 0.0f, 0.005f));
+				render();
+				ws_check();
+			}
+		}
+	} while (time < 30);
 	_animating = false;
 }
 
@@ -290,9 +284,14 @@ int MyViewer::handle_keyboard(const GsEvent &e)
 		return 1;
 	}
 	case GsEvent::KeyLeft:
-	{
+	{	if (camera().center.x <= house1.dx() && camera().center.z <= house1.dz() && camera().center.x >= house1.dx() - 1000.0f && camera().center.z >= house1.dz() - 1000.0f) {
+		gsout << house1.dz() << "," << house1.dx() << gsnl;
+		return 1;
+		}
+	else {
 		move_camera_left();
 		return 1;
+		}
 	}
 	case GsEvent::KeyUp:
 	{
@@ -310,8 +309,10 @@ int MyViewer::handle_keyboard(const GsEvent &e)
 		return 1;
 	}
 	case 'q':
-	{
-		camera_zoom_in();
+	{	if (camera().center.z >= house1.dz() - 70000.0f) {
+			camera_zoom_in();
+			
+		}
 		return 1;
 	}
 	case 'e':
