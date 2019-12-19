@@ -39,16 +39,12 @@ void MyViewer::add_model(SnShape *s, GsVec p)
 {
 	SnManipulator *manip = new SnManipulator;
 	GsMat m;
-	GsMat r;
 	m.translation(p);
 	manip->initial_mat(m);
 	SnManipulator *shadow = new SnManipulator;
 	GsMat shad;
 
-	shad.setl1(1, -8 / 5, 0, 0);
-	shad.setl2(0, 0, 0, 0);
-	shad.setl3(0, -20 / 5, 1, 0);
-	shad.setl4(0, 0, 0, 1);
+	shad.set(shadowPoints);
 	shad.rcombtrans(p);
 
 	shadow->initial_mat(shad);
@@ -64,40 +60,6 @@ void MyViewer::add_model(SnShape *s, GsVec p)
 	rootg()->add(shadow);
 
 	rootg()->add(manip);
-
-	//FUNCTION FOR animations that move around
-
-	//camera FUNCTIONS :) FROM PREVIOUS PROJECT WILL NEED TO IMPLENTENT LATER
-	//double frdt = 1.0 / 30.0;
-	//double t, lt, t0 = gs_time();
-	//gtime = 0.0f;
-	//if (camView == true) {
-	//	camera().eye.x = 10;
-	//	camera().eye.y = 280;
-	//	camera().eye.z = 10;
-	//	render();
-	//	ws_check();
-	//}
-	//else {
-	//	t = 0;
-	//	lt = 0;
-	//	do {
-	//		lt = gs_time() - t0;
-	//		if (lt < 2.0f) {
-	//			camera().eye.x += 0.1f;
-	//			camera().eye.z += 0.1f;
-	//			camera().center.y = 0.0f;
-	//		}
-	//		if (lt > 2.0f && lt <= 5.0f) {
-	//			camera().eye.x -= 0.05f;
-	//			camera().eye.z -= 0.05f;
-	//		}
-
-	//		render();
-	//		ws_check();
-	//		message().setf("local time = % f", lt);
-	//	} while (lt < 5.0f);
-	//}
 }
 
 void MyViewer::build_scene()
@@ -105,15 +67,15 @@ void MyViewer::build_scene()
 	// Re-initialize the scene before drawing.
 	rootg()->remove_all();
 
-	SnModel *Grass = new SnModel; //grass
-	if (!Grass->model()->load("../src/Objects/grassPatch.obj"))
-	{
-		gsout << "Grass was not loaded" << gsnl;
-	}
-	Grass->color(GsColor::green);
-	GsModel *GrassModel = Grass->model();
-	GrassModel->scale(10000);
-	rootg()->add(Grass);
+	// SnModel *Grass = new SnModel; //grass
+	// if (!Grass->model()->load("../src/Objects/grassPatch.obj"))
+	// {
+	// 	gsout << "Grass was not loaded" << gsnl;
+	// }
+	// Grass->color(GsColor::green);
+	// GsModel *GrassModel = Grass->model();
+	// GrassModel->scale(10000);
+	// rootg()->add(Grass);
 
 	SnModel *TwoStoryHouse = new SnModel;
 	if (!TwoStoryHouse->model()->load("../src/Objects/mushroom-house.obj"))
@@ -134,17 +96,6 @@ void MyViewer::build_scene()
 	GsModel *TwoStoryHouseModel1 = TwoStoryHouse1->model();
 	TwoStoryHouseModel1->scale(1);
 	add_model(TwoStoryHouse1, GsVec(20000.0F, 0.0F, 20000.0F));
-
-	// ! Trying to load a second mushroom house
-	SnModel *TwoStoryHouse2 = new SnModel;
-	if (!TwoStoryHouse2->model()->load("../src/Objects/mushroom-house-1.obj"))
-	{
-		gsout << "TwoStoryHouse was not loaded" << gsnl;
-	}
-	// TwoStoryHouse->color(GsColor::green);
-	GsModel *TwoStoryHouseModel2 = TwoStoryHouse2->model();
-	TwoStoryHouseModel2->scale(1);
-	add_model(TwoStoryHouse2, GsVec(3000.0f, 0.0f, -20000.0f));
 
 	SnModel *TwoStoryHouse3 = new SnModel;
 	if (!TwoStoryHouse3->model()->load("../src/Objects/mushroom-house.obj"))
@@ -168,14 +119,14 @@ void MyViewer::build_scene()
 	//add_model(House, GsVec(-20000.0f, 10.0f, 30000.0f));
 }
 
-void MyViewer::move_camera_left()
+void MyViewer::move_camera_right()
 {
 	camera().translate(GsVec(cameraX - cameraAdjustment, cameraY, cameraZ));
 	render();
 	ws_check();
 }
 
-void MyViewer::move_camera_right()
+void MyViewer::move_camera_left()
 {
 	camera().translate(GsVec(cameraX + cameraAdjustment, cameraY, cameraZ));
 	render();
@@ -184,26 +135,54 @@ void MyViewer::move_camera_right()
 
 void MyViewer::move_camera_up()
 {
-	camera().translate(GsVec(cameraX, cameraY + cameraAdjustment, cameraZ));
+	camera().translate(GsVec(cameraX, cameraY - cameraAdjustment, cameraZ));
 	render();
 	ws_check();
 }
 
 void MyViewer::move_camera_down()
 {
-	camera().translate(GsVec(cameraX, cameraY - cameraAdjustment, cameraZ));
+	camera().translate(GsVec(cameraX, cameraY + cameraAdjustment, cameraZ));
 	render();
 	ws_check();
 }
 
-void MyViewer::camera_zoom_in() {
+void MyViewer::camera_zoom_in()
+{
 	camera().translate(GsVec(cameraX, cameraY, cameraZ - cameraAdjustment));
 	render();
 	ws_check();
 }
 
-void MyViewer::camera_zoom_out() {
+void MyViewer::camera_zoom_out()
+{
 	camera().translate(GsVec(cameraX, cameraY, cameraZ + cameraAdjustment));
+	render();
+	ws_check();
+}
+
+void MyViewer::move_sun_right()
+{
+	shadowPoints[1] += 1;
+	render();
+	ws_check();
+}
+
+void MyViewer::move_sun_left()
+{
+	shadowPoints[1] -= 1;
+	render();
+	ws_check();
+}
+
+void MyViewer::move_sun_up() {
+	shadowPoints[9] += 1;
+	render();
+	ws_check();
+}
+
+void MyViewer::move_sun_down() {
+	shadowPoints[9] -= 1;
 	render();
 	ws_check();
 }
@@ -285,12 +264,18 @@ void MyViewer::show_normals(bool view)
 int MyViewer::handle_keyboard(const GsEvent &e)
 {
 	int ret = WsViewer::handle_keyboard(e); // 1st let system check events
+	bool update = false;
 
 	if (ret)
 		return ret;
 
 	// for Debug mode only
-	gsout << "camera: " << camera() << gsnl;
+	// gsout << "Camera: " << camera() << gsnl;
+	gsout << "Shadow: ";
+	for (int i = 0; i < sizeof(shadowPoints)/sizeof(shadowPoints[0]); i++) {
+		if (i%4 == 0) gsnl;
+		gsout << shadowPoints[i] << ", ";
+	}
 
 	switch (e.key)
 	{
@@ -324,19 +309,44 @@ int MyViewer::handle_keyboard(const GsEvent &e)
 		move_camera_down();
 		return 1;
 	}
-	case  'q':
+	case 'q':
 	{
 		camera_zoom_in();
 		return 1;
 	}
-	case 'a':
+	case 'e':
 	{
 		camera_zoom_out();
+		return 1;
+	}
+	case 'w':
+	{
+		move_sun_up();
+		return 1;
+	}
+	case 'a':
+	{
+		move_sun_left();
+		return 1;
+	}
+	case 's':
+	{
+		move_sun_down();
+		return 1;
+	}
+	case 'd':
+	{
+		move_sun_right();
 		return 1;
 	}
 	default:
 		gsout << "Key pressed: " << e.key << gsnl;
 	}
+
+	// if ( update )
+	// {	_gLight->get<SnTransform>(0)->get().setrans(lightPos);
+	// 	update_shadow ();
+	// }
 
 	return 0;
 }
