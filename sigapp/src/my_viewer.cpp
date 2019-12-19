@@ -119,7 +119,7 @@ void MyViewer::build_scene()
 	// add_model(TwoStoryHouse3, GsVec(-20000.0f, 0.0f, 0.0f));
 
 	SnModel *TwoStoryHouse = new SnModel;
-	if (!TwoStoryHouse->model()->load("../src/Objects/village2.0.obj"))
+	if (!TwoStoryHouse->model()->load("../src/Objects/villagefinal3.obj"))
 	{
 		gsout << "TwoStoryHouse was not loaded" << gsnl;
 	}
@@ -285,28 +285,28 @@ void MyViewer::build_scene()
 
 void MyViewer::move_camera_right()
 {
-	camera().translate(GsVec(cameraX - cameraAdjustment, cameraY, cameraZ));
+	camera().translate(GsVec(cameraX + cameraAdjustment, cameraY, cameraZ));
 	render();
 	ws_check();
 }
 
 void MyViewer::move_camera_left()
 {
-	camera().translate(GsVec(cameraX + cameraAdjustment, cameraY, cameraZ));
+	camera().translate(GsVec(cameraX - cameraAdjustment, cameraY, cameraZ));
 	render();
 	ws_check();
 }
 
 void MyViewer::move_camera_up()
 {
-	camera().translate(GsVec(cameraX, cameraY - cameraAdjustment, cameraZ));
+	camera().translate(GsVec(cameraX, cameraY + cameraAdjustment, cameraZ));
 	render();
 	ws_check();
 }
 
 void MyViewer::move_camera_down()
 {
-	camera().translate(GsVec(cameraX, cameraY + cameraAdjustment, cameraZ));
+	camera().translate(GsVec(cameraX, cameraY - cameraAdjustment, cameraZ));
 	render();
 	ws_check();
 }

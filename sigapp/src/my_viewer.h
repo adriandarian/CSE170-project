@@ -32,7 +32,7 @@ protected:
 
 	// Camera Global Variables
 	bool cameraMovement = true;
-	float cameraX = 0, cameraY = 0, cameraZ = 0, cameraAdjustment = 1000.0f;
+	float cameraX = 0, cameraY = 0, cameraZ = 0, cameraAdjustment = 10.0f;
 
 	// Bounding Box
 	GsBox house1, house2;
