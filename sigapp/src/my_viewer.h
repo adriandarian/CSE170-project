@@ -62,6 +62,7 @@ protected:
 		1  // ?
 	};
 
+	GsMat shad;
 	// Object Global Variables
 	float xTwoStoryHouse = 0.0,
 		  yTwoStoryHouse = 0.0, zTwoStoryHouse = 0.0;

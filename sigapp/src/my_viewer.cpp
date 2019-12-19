@@ -42,7 +42,7 @@ void MyViewer::add_model(SnShape *s, GsVec p)
 	m.translation(p);
 	manip->initial_mat(m);
 	SnManipulator *shadow = new SnManipulator;
-	GsMat shad;
+	
 
 	shad.set(shadowPoints);
 	shad.rcombtrans(p);
@@ -76,6 +76,8 @@ void MyViewer::build_scene()
 	// GsModel *GrassModel = Grass->model();
 	// GrassModel->scale(10000);
 	// rootg()->add(Grass);
+	
+	
 
 	SnModel *TwoStoryHouse = new SnModel;
 	if (!TwoStoryHouse->model()->load("../src/Objects/mushroom-house.obj"))
@@ -95,8 +97,9 @@ void MyViewer::build_scene()
 	}
 	// TwoStoryHouse->color(GsColor::green);
 	GsModel *TwoStoryHouseModel1 = TwoStoryHouse1->model();
+	TwoStoryHouse1->model()->get_bounding_box(house2);
 	TwoStoryHouseModel1->scale(1);
-	//add_model(TwoStoryHouse1, GsVec(20000.0F, 0.0F, 20000.0F));
+	add_model(TwoStoryHouse1, GsVec(20000.0F, 0.0F, 20000.0F));
 
 	SnModel *TwoStoryHouse3 = new SnModel;
 	if (!TwoStoryHouse3->model()->load("../src/Objects/mushroom-house.obj"))
@@ -122,14 +125,14 @@ void MyViewer::build_scene()
 
 void MyViewer::move_camera_right()
 {
-	camera().translate(GsVec(cameraX - cameraAdjustment, cameraY, cameraZ));
+	camera().translate(GsVec(cameraX + cameraAdjustment, cameraY, cameraZ));
 	render();
 	ws_check();
 }
 
 void MyViewer::move_camera_left()
 {
-	camera().translate(GsVec(cameraX + cameraAdjustment, cameraY, cameraZ));
+	camera().translate(GsVec(cameraX - cameraAdjustment, cameraY, cameraZ));
 	render();
 	ws_check();
 }
@@ -165,6 +168,7 @@ void MyViewer::camera_zoom_out()
 void MyViewer::move_sun_right()
 {
 	shadowPoints[1] += 1;
+	shad.set(shadowPoints);
 	render();
 	ws_check();
 }
@@ -265,10 +269,10 @@ int MyViewer::handle_keyboard(const GsEvent &e)
 
 	// for Debug mode only
 	// gsout << "Camera: " << camera() << gsnl;
-	gsout << "Shadow: ";
+	//gsout << "Shadow: ";
 	for (int i = 0; i < sizeof(shadowPoints)/sizeof(shadowPoints[0]); i++) {
 		if (i%4 == 0) gsnl;
-		gsout << shadowPoints[i] << ", ";
+		//gsout << shadowPoints[i] << ", ";
 	}
 
 	switch (e.key)
@@ -284,13 +288,16 @@ int MyViewer::handle_keyboard(const GsEvent &e)
 		return 1;
 	}
 	case GsEvent::KeyLeft:
-	{	if (camera().center.x <= house1.dx() && camera().center.z <= house1.dz() && camera().center.x >= house1.dx() - 1000.0f && camera().center.z >= house1.dz() - 1000.0f) {
-		gsout << house1.dz() << "," << house1.dx() << gsnl;
-		return 1;
+	{
+		if (camera().center.x > -6000 && camera().center.x <= 6000 && camera().center.z < -58652.7f && camera().center.z > -73000.0f)	{
+			gsout << "Limit Reached" << gsnl;
+			
+			return 1;
 		}
-	else {
-		move_camera_left();
-		return 1;
+
+		else {
+			move_camera_left();
+			return 1;
 		}
 	}
 	case GsEvent::KeyUp:
@@ -299,25 +306,48 @@ int MyViewer::handle_keyboard(const GsEvent &e)
 		return 1;
 	}
 	case GsEvent::KeyRight:
-	{
+	{if (camera().center.x > -6000 && camera().center.x < 6000 && camera().center.z < -58652.7f && camera().center.z > -72000.0f) {
+		gsout << "Limit Reached" << gsnl;
+
+		return 1;
+	}
+
+	else {
 		move_camera_right();
 		return 1;
+	}
 	}
 	case GsEvent::KeyDown:
 	{
 		move_camera_down();
 		return 1;
 	}
+	case 'c': {
+		gsout  << "Bounding Box: " << house1.dx() << ", " << house1.dy() << ", " << house1.dz() << gsnl;
+		gsout << "Camera: " << camera().center << gsnl << gsnl;
+		gsout << "z - 7000" << house1.dz() - 70000.0f << gsnl;
+		return 1;
+	}
 	case 'q':
-	{	if (camera().center.z >= house1.dz() - 70000.0f) {
+	{
+		
+		if (camera().center.x >= -6000 && camera().center.x <= 6000 && camera().center.z < -58652.7f) {
+			gsout << "Limit Reached" << gsnl;
+			return 1;
+		}
+		else {
 			camera_zoom_in();
-			
 		}
 		return 1;
 	}
 	case 'e':
-	{
+	{	if (camera().center.x >= -6000 && camera().center.x <= 6000 && camera().center.z < -59652.7f && camera().center.z > -73000.0f) {
+		gsout << "Limit Reached" << gsnl;
+		return 1;
+	}
+	else {
 		camera_zoom_out();
+	}
 		return 1;
 	}
 	case 'w':
